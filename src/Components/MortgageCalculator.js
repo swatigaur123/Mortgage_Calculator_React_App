@@ -25,7 +25,7 @@ export class MortgageCalculator extends Component {
             monthlyPayment: '',
             noOfPayementsTerm: '',
             noOfPaymentAmortPeriod: '',
-            paymentSchedule: CalculatorLogic.paymentSchedule,
+            paymentSchedule: [],
             loanAmount: '',
             monthlyRate: '',
             months: '',
@@ -42,8 +42,6 @@ export class MortgageCalculator extends Component {
         }
 
     }
-
-    
 
     onChangeMortgageAmount = (e) => {
         this.setState({
@@ -93,6 +91,9 @@ export class MortgageCalculator extends Component {
         }
 
     }
+    // componentDidMount() {
+    //     this.state.paymentSchedule = mortgageParameters.paymentSchedule
+    // }
     submitHandler = event => {
         event.preventDefault();
         event.target.className += " was-validated";
@@ -105,6 +106,7 @@ export class MortgageCalculator extends Component {
             let mortgageParameters = CalculatorLogic.calculatePayment(mortgagenAmount, interestRate, amortizationPeriod, paymentFrequency)
             let termCount = this.state.term * this.paymentFrequencyCount(this.state.paymentFrequency)
             let amortCount = mortgageParameters.paymentSchedule.length
+            this.state.paymentSchedule = mortgageParameters.paymentSchedule
     
             this.setState({
                 noOfPayementsTerm: this.state.term * this.paymentFrequencyCount(this.state.paymentFrequency)
@@ -169,7 +171,7 @@ export class MortgageCalculator extends Component {
                 
                 <Form onSubmit={this.submitHandler} noValidate>
                     <Form.Group as={Row} controlId="mortgageAmount" className="mortgageAmount">
-                        <Form.Label column sm="2">
+                        <Form.Label column sm="2" >
                         Mortgage Amount
                         </Form.Label>
                         <Col sm="10">
@@ -177,7 +179,7 @@ export class MortgageCalculator extends Component {
                             <InputGroup.Prepend>
                             <InputGroup.Text id="inputGroupPrepend">$</InputGroup.Text>
                         </InputGroup.Prepend>
-                            <Form.Control  inputref={node => this.state.mortgageAmount = node} 
+                            <Form.Control  inputref={this.state.mortgageAmount} 
                             onChange={this.onChangeMortgageAmount}
                             placeholder="100000.00"
                             onKeyPress={(e) => this.limitInputCharacter(e)}
@@ -188,13 +190,13 @@ export class MortgageCalculator extends Component {
                     </Form.Group>
 
                     <Form.Group as={Row} controlId="interestRate" className="interestRate">
-                        <Form.Label column sm="2">
+                        <Form.Label column sm="2" >
                         Interest Rate
                         </Form.Label>
                         <Col sm="10">
                         <InputGroup>
                             <Form.Control  placeholder="5.00"  
-                            inputref={node => this.state.interestRate = node} 
+                            inputref={this.state.interestRate} 
                             onChange={this.onChangeInterestRate}
                             onKeyPress={(e) => this.limitInputCharacter(e)}
                             autoComplete="off"
@@ -207,10 +209,10 @@ export class MortgageCalculator extends Component {
                     </Form.Group>
 
                     <Form.Group as={Row} controlId="amortizationPeriod" className="amortizationPeriod">
-                            <Form.Label  column sm="2">Amortization Period
+                            <Form.Label column sm="2">Amortization Period
                             </Form.Label>
                             <Col sm="10">
-                                <Form.Control as="select" className="amortization-period"  inputref={node => this.state.amortizationPeriod = node}  onChange={this.onChangeAmortizationPeriod} required>
+                                <Form.Control as="select" className="amortization-period"  inputref={this.state.amortizationPeriod}  onChange={this.onChangeAmortizationPeriod} required>
                                 <option value="">Select Amortization Period</option>
                                     <option value="01">1</option>
                                     <option value="02">2</option>
@@ -243,7 +245,7 @@ export class MortgageCalculator extends Component {
                                     <option value="29">29</option>
                                     <option value="30">30</option>
                                 </Form.Control>
-                                { this.state.amortizationPeriod < this.state.term? <strong style={validationError}>The amortization period must be equal to or greater than the term.</strong> : ''}
+                                { this.state.amortizationPeriod < this.state.term? <strong className="validationText" style={validationError}>The amortization period must be equal to or greater than the term.</strong> : ''}
                                 </Col>
                     </Form.Group>
 
@@ -251,7 +253,7 @@ export class MortgageCalculator extends Component {
                             <Form.Label  column sm="2">Payment Frequncy
                             </Form.Label>
                             <Col sm="10">
-                                <Form.Control as="select" className="payment-frequency"  inputref={node => this.state.paymentFrequency = node}  onChange={this.onChangePaymentFrequency} required>
+                                <Form.Control as="select" className="payment-frequency"  inputref={this.state.paymentFrequency}  onChange={this.onChangePaymentFrequency} required>
                                     <option value="">Select Payement Frequency</option>
                                     <option value="regular_weekly">Weekly</option>
                                     <option value="acclerated_weekly">Accelarated weekly</option>
@@ -267,7 +269,7 @@ export class MortgageCalculator extends Component {
                             <Form.Label  column sm="2">Term
                             </Form.Label>
                             <Col sm="10">
-                                <Form.Control as="select" className= "term-select"  inputref={node => this.state.term = node} onChange={this.onChangeTerm} required>  
+                                <Form.Control as="select" className= "term-select"  inputref={this.state.term} onChange={this.onChangeTerm} required>  
                                     <option value="">Select Term</option>                        
                                      <option value="01">1 Year</option>
                                      <option value="02">2 Year</option>
@@ -294,7 +296,8 @@ export class MortgageCalculator extends Component {
                                 termPrincipalPayments={this.state.termPrincipalPayments}
                                 amortPrincipalPayemnets={this.state.amortPrincipalPayemnets}
                                 noOfPayementsTerm={this.state.noOfPayementsTerm}
-                                noOfPaymentAmortPeriod={this.state.noOfPaymentAmortPeriod}>
+                                noOfPaymentAmortPeriod={this.state.noOfPaymentAmortPeriod}
+                                paymentSchedule= {this.state.paymentSchedule}>    
 
                 </Summary>
             </Form>              
@@ -323,7 +326,9 @@ const styleButton = {
     backgroundColor: '#335075',
     color: 'white',
     marginBottom: '10px',
-    marginTop: '10px'
+    marginTop: '10px',
+    width: '100%',
+    padding: '10px'
 }
 
 export default MortgageCalculator

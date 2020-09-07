@@ -1,10 +1,10 @@
-This app help the user to calculate the mortgage payment( **Interest type-variable**) based on his inputs and also provide interesting mortgage details. The app is designed responsive with mobile first approach.
+This app help the user to calculate the mortgage payment( **Interest type-variable**) based on his inputs and also provide interesting mortgage details like **payment breakdown in payment schedule table**. The app is designed responsive with mobile first approach.
 The application is built using React version 16.13.1. React Bootstrap is used to build the responsive and mobile friendly UI. Cypress is used for the End to end test coverage.
 Validations are added for a couple of user scenarios on the UI.
 
 ## Available Scripts
 
-In the project directory, you can run:
+In the project directory, you can run: 
 
 ### `npm install`
 

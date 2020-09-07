@@ -67,7 +67,7 @@ class CalculatorLogic{
     static calculateMonthlyPaymentSchedule (loanAmount, monthlyRate, months, mortgagePayment, paymentFrequency) {
         
         console.log("mortgage payment",mortgagePayment);
-        let loopCounter=months
+        let loopCounter=months/12
         let interestDivider=1
         switch(paymentFrequency){
 

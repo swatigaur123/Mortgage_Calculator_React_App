@@ -37,7 +37,7 @@ describe('MortgageCalculator Tests', () => {
             cy.get('.interestRate').type('4.32'),
             cy.get('.amortization-period').select('15'),
             cy.get('.payment-frequency').select('Monthly'),
-            cy.get('.term-select').select('1')
+            cy.get('.term-select').select('01')
             .then(() => {
                 cy.get('.calculate-button')
                 .click()
@@ -56,5 +56,17 @@ describe('MortgageCalculator Tests', () => {
 
             })
          } )
+
+         it('Validation Scenario: Shows Error is Amortization period is less than Term', () => {
+            cy.get('.amortization-period').select('04'),
+            cy.get('.term-select').select('05')
+            .then(() => {
+                cy.get('.calculate-button')
+                .click()
+               
+            cy.get('.validationText').should('be.visible')    
+
+            })
+         })
     })
 })
